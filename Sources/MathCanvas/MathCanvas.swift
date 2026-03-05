@@ -1,12 +1,7 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 
-#if canImport(UIKit)
-import UIKit
-#elseif canImport(AppKit)
-import AppKit
-#endif
-import CoreGraphics
+// MathCanvas.swift
 import SwiftUI
 
 public struct MathCanvas: View {
@@ -20,15 +15,12 @@ public struct MathCanvas: View {
 
     public var body: some View {
         Canvas { context, size in
-            //guard let cgContext = context.cgContext else { return }
             guard let mathLayout = try? buildLayout() else { return }
             let origin = CGPoint(
                 x: (size.width - mathLayout.width) / 2,
                 y: (size.height - mathLayout.height) / 2
             )
-            context.withCGContext { cgContext in
-                mathLayout.draw(cgContext, origin)
-            }
+            mathLayout.draw(&context, origin)
         }
         .frame(width: layoutSize.width + 16, height: layoutSize.height + 16)
     }
@@ -50,11 +42,7 @@ public struct MathCanvas: View {
         let tokens = try lexer.tokenize()
         var parser = Parser(tokens: tokens)
         let ast = try parser.parse()
-        let renderer = MathRenderer(
-            fontSize: fontSize,
-            color: PlatformColor(color)
-        )
-        return renderer.layout(ast)
+        return MathRenderer(fontSize: fontSize, color: color).layout(ast)
     }
 
     private var layoutSize: CGSize {
