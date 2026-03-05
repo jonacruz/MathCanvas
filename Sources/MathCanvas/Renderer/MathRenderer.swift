@@ -16,10 +16,17 @@ struct MathRenderer {
     let fontSize: CGFloat
     let color: PlatformColor
 
+    #if canImport(UIKit)
+    init(fontSize: CGFloat = 24, color: PlatformColor = .label) {
+        self.fontSize = fontSize
+        self.color = color
+    }
+    #elseif canImport(AppKit)
     init(fontSize: CGFloat = 24, color: PlatformColor = .labelColor) {
         self.fontSize = fontSize
         self.color = color
     }
+    #endif
 
     // MARK: - Entry point
 
