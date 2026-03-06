@@ -92,16 +92,22 @@ x           → variable (rendered in italic)
 |---|---|
 | `sqrt(x)` | Square root with overline |
 | `frac(a, b)` | Fraction with horizontal bar |
+| `mfrac(n, a, b)` | Mixed fraction: integer part `n` next to fraction `a/b` |
 | `sin(x)` | Sine |
 | `cos(x)` | Cosine |
+| `tan(x)` | Tangent |
+| `log(x)` | Logarithm |
 
 ### Examples
 
 ```
 x^2 + y^2 = 25
 frac(1, 2) + frac(1, 3) = frac(5, 6)
+mfrac(1, 1, 2) + mfrac(2, 3, 4)
 sqrt(x^2 + y^2)
 sin(x)^2 + cos(x)^2 = 1
+tan(x) = frac(sin(x), cos(x))
+log(x + 1) = y
 -b + sqrt(b^2)
 frac(sqrt(x), 2)
 ```
@@ -124,7 +130,6 @@ MathCanvas processes expressions in three stages:
 - [ ] Scaled parentheses that grow with content — `( frac(1,2) )`
 - [ ] Subscripts — `x_i`
 - [ ] Display vs inline mode
-- [ ] `tan`, `log` functions
 - [ ] Multiplatform SwiftUI preview support
 - [ ] Swift 6 concurrency compatibility
 

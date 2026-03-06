@@ -26,8 +26,11 @@ indirect enum ASTNode: Equatable {
     // Functions
     case sqrt(ASTNode)
     case frac(numerator: ASTNode, denominator: ASTNode)
+    case mixedFrac(whole: ASTNode, numerator: ASTNode, denominator: ASTNode)
     case sin(ASTNode)
     case cos(ASTNode)
+    case tan(ASTNode)
+    case log(ASTNode)
     
     static func == (lhs: ASTNode, rhs: ASTNode) -> Bool {
         switch (lhs, rhs) {
@@ -55,8 +58,14 @@ indirect enum ASTNode: Equatable {
             return a == b
         case (.cos(let a), .cos(let b)):
             return a == b
+        case (.tan(let a), .tan(let b)):
+            return a == b
+        case (.log(let a), .log(let b)):
+            return a == b
         case (.frac(let n1, let d1), .frac(let n2, let d2)):
             return n1 == n2 && d1 == d2
+        case (.mixedFrac(let w1, let n1, let d1), .mixedFrac(let w2, let n2, let d2)):
+            return w1 == w2 && n1 == n2 && d1 == d2
         default:
             return false
         }

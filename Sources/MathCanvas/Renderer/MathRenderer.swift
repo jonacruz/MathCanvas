@@ -53,11 +53,20 @@ import SwiftUI
          case .frac(let num, let den):
              return layoutFrac(num, den)
 
+         case .mixedFrac(let whole, let num, let den):
+             return layoutMixedFrac(whole, num, den)
+
          case .sin(let inner):
              return layoutFunction("sin", inner)
 
          case .cos(let inner):
              return layoutFunction("cos", inner)
+
+         case .tan(let inner):
+             return layoutFunction("tan", inner)
+
+         case .log(let inner):
+             return layoutFunction("log", inner)
          }
      }
 
@@ -213,6 +222,27 @@ import SwiftUI
          return MathLayout(width: totalWidth, height: totalHeight, baseline: baseline) { ctx, origin in
              opLayout.draw(&ctx, origin)
              innerLayout.draw(&ctx, CGPoint(x: origin.x + opLayout.width, y: origin.y))
+         }
+     }
+
+     private func layoutMixedFrac(_ whole: ASTNode, _ num: ASTNode, _ den: ASTNode) -> MathLayout {
+         let wholeLayout = layout(whole)
+         let fracRenderer = MathRenderer(fontSize: fontSize * 0.65, color: color)
+         let fracLayout = fracRenderer.layout(.frac(numerator: num, denominator: den))
+         let spacing: CGFloat = 4
+
+         // Align the whole number baseline with the fraction bar (fracLayout.baseline)
+         let baselineDiff = fracLayout.baseline - wholeLayout.baseline
+         let wholeY: CGFloat = max(0, baselineDiff)
+         let fracY: CGFloat  = max(0, -baselineDiff)
+
+         let totalWidth  = wholeLayout.width + spacing + fracLayout.width
+         let totalHeight = max(wholeY + wholeLayout.height, fracY + fracLayout.height)
+         let baseline    = wholeY + wholeLayout.baseline
+
+         return MathLayout(width: totalWidth, height: totalHeight, baseline: baseline) { ctx, origin in
+             wholeLayout.draw(&ctx, CGPoint(x: origin.x, y: origin.y + wholeY))
+             fracLayout.draw(&ctx, CGPoint(x: origin.x + wholeLayout.width + spacing, y: origin.y + fracY))
          }
      }
 

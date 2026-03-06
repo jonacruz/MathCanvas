@@ -73,7 +73,7 @@ struct Lexer {
         }
         
         // if has more than one character is a function
-        let knownFunctions: Set<String> = ["sqrt", "frac", "sin", "cos", "tan", "log"]
+        let knownFunctions: Set<String> = ["sqrt", "frac", "mfrac", "sin", "cos", "tan", "log"]
         if knownFunctions.contains(raw) {
             return .function(raw)
         }
