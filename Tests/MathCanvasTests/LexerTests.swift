@@ -44,6 +44,29 @@ struct LexerTests {
         #expect(tokens == [.number(3.14), .end])
     }
 
+    @Test func tanFunction() throws {
+        var lexer = Lexer("tan(x)")
+        let tokens = try lexer.tokenize()
+        #expect(tokens == [.function("tan"), .leftParen, .variable("x"), .rightParen, .end])
+    }
+
+    @Test func logFunction() throws {
+        var lexer = Lexer("log(x)")
+        let tokens = try lexer.tokenize()
+        #expect(tokens == [.function("log"), .leftParen, .variable("x"), .rightParen, .end])
+    }
+
+    @Test func mixedFraction() throws {
+        var lexer = Lexer("mfrac(1,1,2)")
+        let tokens = try lexer.tokenize()
+        #expect(tokens == [
+            .function("mfrac"), .leftParen,
+            .number(1), .comma, .number(1), .comma, .number(2),
+            .rightParen,
+            .end
+        ])
+    }
+
     @Test func unexpectedCharacter() {
         var lexer = Lexer("x @ y")
         #expect(throws: (any Error).self) {

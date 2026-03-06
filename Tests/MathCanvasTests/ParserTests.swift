@@ -40,6 +40,48 @@ struct ParserTests {
         #expect(ast == .frac(numerator: .number(1), denominator: .number(2)))
     }
 
+    @Test func tanFunction() throws {
+        let ast = try parse("tan(x)")
+        #expect(ast == .tan(.variable("x")))
+    }
+
+    @Test func logFunction() throws {
+        let ast = try parse("log(x)")
+        #expect(ast == .log(.variable("x")))
+    }
+
+    @Test func trigonometricIdentity() throws {
+        // sin(x)^2 + cos(x)^2 = 1
+        let ast = try parse("sin(x)^2 + cos(x)^2 = 1")
+        #expect(ast == .equals(
+            .add(
+                .power(.sin(.variable("x")), .number(2)),
+                .power(.cos(.variable("x")), .number(2))
+            ),
+            .number(1)
+        ))
+    }
+
+    @Test func mixedFraction() throws {
+        let ast = try parse("mfrac(1,1,2)")
+        #expect(ast == .mixedFrac(whole: .number(1), numerator: .number(1), denominator: .number(2)))
+    }
+
+    @Test func mixedFractionInExpression() throws {
+        // mfrac(2,3,4) + x debe ser add(mixedFrac(2,3,4), x)
+        let ast = try parse("mfrac(2,3,4) + x")
+        #expect(ast == .add(
+            .mixedFrac(whole: .number(2), numerator: .number(3), denominator: .number(4)),
+            .variable("x")
+        ))
+    }
+
+    @Test func mixedFractionWithExpressions() throws {
+        // La parte entera puede ser una expresión
+        let ast = try parse("mfrac(x,1,3)")
+        #expect(ast == .mixedFrac(whole: .variable("x"), numerator: .number(1), denominator: .number(3)))
+    }
+
     @Test func negate() throws {
         let ast = try parse("-x")
         #expect(ast == .negate(.variable("x")))

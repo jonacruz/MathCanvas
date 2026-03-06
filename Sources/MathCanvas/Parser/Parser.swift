@@ -148,6 +148,14 @@ struct Parser {
             let den = try parseAddSub()
             try expect(.rightParen)
             return .frac(numerator: num, denominator: den)
+        case "mfrac":
+            let whole = try parseAddSub()
+            try expect(.comma)
+            let num = try parseAddSub()
+            try expect(.comma)
+            let den = try parseAddSub()
+            try expect(.rightParen)
+            return .mixedFrac(whole: whole, numerator: num, denominator: den)
         case "sin":
             let arg = try parseAddSub()
             try expect(.rightParen)
@@ -156,6 +164,14 @@ struct Parser {
             let arg = try parseAddSub()
             try expect(.rightParen)
             return .cos(arg)
+        case "tan":
+            let arg = try parseAddSub()
+            try expect(.rightParen)
+            return .tan(arg)
+        case "log":
+            let arg = try parseAddSub()
+            try expect(.rightParen)
+            return .log(arg)
         default:
             throw ParserError.unknownFunction(name)
         }
