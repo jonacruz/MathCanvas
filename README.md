@@ -4,6 +4,9 @@ A lightweight Swift package for rendering math equations natively in SwiftUI usi
 
 ```swift
 MathCanvas("x^2 + y^2 = 25")
+
+MathCanvasGroup(["frac(2,2)", "frac(3,4)", "frac(7,8)"])
+    .equationSeparator(",")
 ```
 
 ## Requirements
@@ -50,17 +53,49 @@ struct ContentView: View {
 
             MathCanvas("sqrt(x^2 + y^2)")
                 .equationColor(.blue)
+
+            // With a description label below the equation
+            MathCanvas("frac(3,8)")
+                .equationDescription("tres octavos")
+
+            // Horizontal group of equations
+            MathCanvasGroup(["frac(2,2)", "frac(3,4)", "frac(7,8)"])
+                .equationSeparator(",")
+
+            MathCanvasGroup(["x^2", "x^3", "x + y", "sin(60)"])
+                .equationFont(size: 20)
+                .equationColor(.blue)
         }
     }
 }
 ```
 
-### Modifiers
+### MathCanvas Modifiers
 
 | Modifier | Description |
 |---|---|
 | `.equationFont(size:)` | Sets the base font size |
 | `.equationColor(_:)` | Sets the equation color |
+| `.equationDescription(_:)` | Shows a text label below the equation |
+
+### MathCanvasGroup
+
+`MathCanvasGroup` renders a list of equations in a horizontal scrollable row.
+
+```swift
+MathCanvasGroup(["frac(1,4)", "frac(2,4)", "frac(3,4)"])
+    .equationSeparator(",")
+    .equationFont(size: 28)
+    .equationColor(.primary)
+    .equationSpacing(20)
+```
+
+| Modifier | Description |
+|---|---|
+| `.equationFont(size:)` | Sets the font size for all equations |
+| `.equationColor(_:)` | Sets the color for all equations |
+| `.equationSpacing(_:)` | Sets the spacing between items (default: `16`) |
+| `.equationSeparator(_:)` | Text rendered between each equation (e.g. `","`, `"·"`, `"→"`) |
 
 ## Syntax
 
