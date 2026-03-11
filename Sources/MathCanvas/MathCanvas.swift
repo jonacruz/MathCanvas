@@ -8,21 +8,30 @@ public struct MathCanvas: View {
     private let source: String
     private var fontSize: CGFloat = 24
     private var color: Color = .primary
+    private var description: String? = nil
 
     public init(_ source: String) {
         self.source = source
     }
 
     public var body: some View {
-        Canvas { context, size in
-            guard let mathLayout = try? buildLayout() else { return }
-            let origin = CGPoint(
-                x: (size.width - mathLayout.width) / 2,
-                y: (size.height - mathLayout.height) / 2
-            )
-            mathLayout.draw(&context, origin)
+        VStack(spacing: 4) {
+            Canvas { context, size in
+                guard let mathLayout = try? buildLayout() else { return }
+                let origin = CGPoint(
+                    x: (size.width - mathLayout.width) / 2,
+                    y: (size.height - mathLayout.height) / 2
+                )
+                mathLayout.draw(&context, origin)
+            }
+            .frame(width: layoutSize.width + 16, height: layoutSize.height + 16)
+
+            if let description {
+                Text(description)
+                    .font(.caption)
+                    .foregroundColor(color)
+            }
         }
-        .frame(width: layoutSize.width + 16, height: layoutSize.height + 16)
     }
 
     // MARK: - Modifiers
@@ -33,6 +42,10 @@ public struct MathCanvas: View {
 
     public func equationColor(_ color: Color) -> MathCanvas {
         var copy = self; copy.color = color; return copy
+    }
+
+    public func equationDescription(_ text: String) -> MathCanvas {
+        var copy = self; copy.description = text; return copy
     }
 
     // MARK: - Private
